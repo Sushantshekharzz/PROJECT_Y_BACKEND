@@ -1,4 +1,3 @@
-// src/models/ExcelUpload.js
 import { DataTypes } from "sequelize";
 
 export default (sequelize) => {
@@ -17,8 +16,13 @@ export default (sequelize) => {
       
     },
     userId: {
-      type: DataTypes.UUID  ,
+      type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: "Users", // ✅ table name (not model name)
+        key: "id",
+      },
+      onDelete: "CASCADE",
     },
   });
 

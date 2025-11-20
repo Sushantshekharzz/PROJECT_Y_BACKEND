@@ -3,7 +3,8 @@ import cookieParser from "cookie-parser";
 import { sequelize } from "./models/index.js";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
-import excelRoutes from "./routes/excelRoutes.js";
+import excelUploadRoutes from "./routes/excelUploadRoutes.js";
+import excelCleanRoutes from "./routes/excelCleanRoutes.js";
 
 
 const app = express();
@@ -24,7 +25,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/excel", excelRoutes)
+app.use("/api/excel-upload", excelUploadRoutes)
+
+app.use("/api/excel-clean", excelCleanRoutes)
+
 
 
 
