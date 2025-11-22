@@ -4,7 +4,7 @@ import {
   getAllExcels,
   updateExcelData,
   deleteExcelData,
-} from "../controllers/excelUploadController.js";
+} from "../controllers/ExcelUploadController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
