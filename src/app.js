@@ -14,7 +14,11 @@ app.use(cookieParser());
 
 
 const corsOptions = {
-  origin: "http://localhost:5173", // <-- your frontend URL
+  // local url
+  // origin: "http://localhost:5173", // <-- your frontend URL
+  // prod url
+    origin: "http://65.0.203.154:5173",  // if Vite dev server
+
   credentials: true,               // <-- allow cookies
 };
 app.use(cors(corsOptions));
