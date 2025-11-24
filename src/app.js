@@ -17,7 +17,7 @@ const corsOptions = {
   // local url
   // origin: "http://localhost:5173", // <-- your frontend URL
   // prod url
-    origin: "http://65.0.203.154:5173",  // if Vite dev server
+    origin: "http://43.205.113.30:5173",  // if Vite dev server
 
   credentials: true,               // <-- allow cookies
 };
