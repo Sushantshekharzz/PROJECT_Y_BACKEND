@@ -8,7 +8,6 @@ import excelCleanRoutes from "./routes/excelCleanRoutes.js";
 
 
 const app = express();
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -17,7 +16,7 @@ const corsOptions = {
   // local url
   // origin: "http://localhost:5173", // <-- your frontend URL
   // prod url
-    origin: "http://43.205.113.30:5173",  // if Vite dev server
+    origin: "http://65.2.177.170:5173",  // if Vite dev server
 
   credentials: true,               // <-- allow cookies
 };
