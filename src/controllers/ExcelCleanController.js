@@ -52,45 +52,10 @@ export const cleanExcel = async (req, res) => {
 /***********************
  *  GARBAGE CHECKERS
  ***********************/
-const isGarbageString = (val) => {
-  if (!val) return false;
-  if (typeof val !== "string") return false;
 
-  // symbols, emojis, nonsense text  
-  const garbagePattern = /^[^a-zA-Z0-9]+$/; // only symbols
-  if (garbagePattern.test(val)) return true;
 
-  if (val.length > 40) return true; // too long
-  if (val.includes("####")) return true;
-  if (val.includes("null") || val.includes("undefined")) return true;
 
-  return false;
-};
 
-const isGarbageNumber = (val) => {
-  if (val === null || val === undefined || val === "") return false;
-
-  if (isNaN(Number(val))) return true;
-  if (Number(val) > 1_000_000_000) return true; // unrealistic large
-  if (Number(val) < -1_000_000_000) return true;
-
-  return false;
-};
-
-const isGarbageDate = (val) => {
-  if (!val) return false;
-
-  // Expecting DD-MM-YYYY or MM-DD-YYYY
-  const validDatePattern =
-    /^([0-2]\d|3[0-1])[-\/](0\d|1[0-2])[-\/]\d{4}$/;
-
-  if (!validDatePattern.test(val)) return true;
-
-  const [dd, mm, yyyy] = val.split("-").map(Number);
-  const d = new Date(yyyy, mm - 1, dd);
-
-  return d.toString() === "Invalid Date";
-};
 
 /***********************
  *   CLEANING ENGINE
@@ -196,9 +161,21 @@ export const performCleaning = (
       isGarbage = true;
     } else if (type === "date") {
       // Assuming value is a Date object or valid date string
-      const parsedDate = new Date(value);
-      if (isNaN(parsedDate.getTime())) isGarbage = true;
-    }
+const parseDate = (value) => {
+  if (!value || typeof value !== "string") return value;
+
+  const match = /^(\d{2})-(\d{2})-(\d{4})$/.exec(value);
+  if (!match) return value;
+
+  const [, dd, mm, yyyy] = match;
+  return new Date(+yyyy, +mm - 1, +dd);
+};
+
+const parsedDate = parseDate(value);
+
+if (!(parsedDate instanceof Date) || isNaN(parsedDate.getTime())) {
+  isGarbage = true;
+}    }
 
     if (isGarbage) {
       row.__deleteRow = true; // Mark row for deletion
