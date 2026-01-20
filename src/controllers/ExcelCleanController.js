@@ -1,5 +1,6 @@
 // POST /api/clean-excel
 import { CleanedExcel, ExcelUpload } from "../models/index.js";
+import { analyzeExcel } from "./aiController.js";
 
 /***********************
  *  MAIN CONTROLLER
@@ -9,12 +10,20 @@ export const cleanExcel = async (req, res) => {
     const userId = req.user.id;
     const { excelId, columnActions, columnTypes, nullOptions } = req.body;
 
+
+
+
+
     if (!excelId || !columnActions || !columnTypes) {
       return res.status(400).json({ message: "Missing data" });
     }
 
     const excel = await ExcelUpload.findByPk(excelId);
+
     if (!excel) return res.status(404).json({ message: "Excel not found" });
+
+       const aiInsight  = await analyzeExcel(excel.data);
+   console.log("aiInsight",aiInsight)
 
     // 🔥 Perform Cleaning
     const cleanedData = performCleaning(
@@ -188,9 +197,7 @@ if (!(parsedDate instanceof Date) || isNaN(parsedDate.getTime())) {
   /***********************************************************
    * FINAL STEP — REMOVE MARKED ROWS
    ***********************************************************/
-  console.log("data",data)
   const cleaned = data.filter((row) => !row.__deleteRow);
-  console.log("cleaned",cleaned)
 
   cleaned.forEach((row) => delete row.__deleteRow);
 
